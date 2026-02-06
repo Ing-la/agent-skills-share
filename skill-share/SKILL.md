@@ -64,7 +64,8 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
      - Last 3 technical → recommend creative/design
      - Default: popular skills
    - Present: 1 recommended + 4 alternatives (A/B/C/D)
-   - **WAIT for user input** (direct confirm, A/B/C/D, or custom direction)
+   - **CRITICAL: STOP and WAIT for user input** (direct confirm, A/B/C/D, or custom direction)
+   - **DO NOT proceed** until user provides explicit choice
 
 2. **Search & Present**:
    - Fetch from https://skills.sh/ based on user's selection
@@ -76,7 +77,8 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
         - [key feature 2]
         - 适合 [target audience]
      ```
-   - **WAIT for user to choose (1/2/3)**
+   - **CRITICAL: STOP and WAIT for user to choose (1/2/3)**
+   - **DO NOT proceed** until user selects one of the options
 
 ### Phase 2: Draft Generation
 
@@ -89,7 +91,8 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
    - **Priority 1**: Check `Agent-skills-share/templates/` directory for available templates
      - If multiple templates found (e.g., `xhs_template.md`, `xhs_template_minimal.md`):
        - List available templates with brief descriptions
-       - Ask user to choose (or use default `xhs_template.md` if exists)
+       - **CRITICAL: STOP and ASK user to choose** (or use default `xhs_template.md` if user doesn't respond)
+       - **DO NOT proceed** until user selects a template or explicitly confirms default
      - If only one template found → use it automatically
    - **Priority 2**: If no template in project directory, try to find skill's default template:
      - Check `.cursor/skills/skill-share/templates/xhs_template.md` (if exists)
@@ -113,7 +116,9 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
 
 ### Phase 3: Installation Decision
 
-Ask: "是否需要安装完成更详细的技术分析和体验反馈？" (是/否)
+**CRITICAL: STOP and ASK user**: "是否需要安装完成更详细的技术分析和体验反馈？" (是/否)
+- **DO NOT proceed** until user provides explicit answer (是/否)
+- **DO NOT assume** or proceed automatically
 
 **If "否"**:
 - Copy `draft.md` to `final.md`
@@ -125,13 +130,16 @@ Ask: "是否需要安装完成更详细的技术分析和体验反馈？" (是/�
 
 ### Phase 4: Installation
 
-Ask: "你自己安装还是我安装？" (我自己安装/你安装)
+**CRITICAL: STOP and ASK user**: "你自己安装还是我安装？" (我自己安装/你安装)
+- **DO NOT proceed** until user provides explicit choice
+- **DO NOT assume** or proceed automatically
 
 **If "我自己安装"**:
 - Provide command: `npx skills add <owner/repo> --skill <skill-name>`
 - Brief guide: "安装过程中会询问安装到哪些agent，可以选择多个或全部"
 - Say: "安装完成后告诉我，我会继续进行分析"
-- Wait for "安装完成" confirmation
+- **CRITICAL: STOP and WAIT for user confirmation** - Wait for user to explicitly say "安装完成" or similar confirmation
+- **DO NOT proceed** until user confirms installation is complete
 - Verify: Check `.cursor/skills/<skill-name>/SKILL.md` exists
 - If verified → Phase 5, else ask user to confirm or proceed with web info only
 
@@ -168,7 +176,9 @@ Ask: "你自己安装还是我安装？" (我自己安装/你安装)
      - Developer Info (50 words, optional)
    - Length: 800-1200 words, concise and professional
 
-3. **Ask**: "是否要体验这个skill？" (是/否)
+3. **CRITICAL: STOP and ASK user**: "是否要体验这个skill？" (是/否)
+   - **DO NOT proceed** until user provides explicit answer
+   - **DO NOT assume** or proceed automatically
 
 **If "否"**:
 - **Generate final.md**: Enhance draft.md with technical-review.md insights:
@@ -184,13 +194,16 @@ Ask: "你自己安装还是我安装？" (我自己安装/你安装)
 
 **If "是"**:
 - Say: "体验完成后告诉我，我会收集反馈并更新文案"
-- Wait for "体验完成" → Phase 6
+- **CRITICAL: STOP and WAIT for user confirmation** - Wait for user to explicitly say "体验完成" or similar confirmation
+- **DO NOT proceed** to Phase 6 until user confirms experience is complete
 
 ### Phase 6: Feedback & Final Update
 
 **Context**: technical-review.md exists, final.md does NOT exist yet
 
-Ask: "是否要更新文案？" (是/否)
+**CRITICAL: STOP and ASK user**: "是否要更新文案？" (是/否)
+- **DO NOT proceed** until user provides explicit answer
+- **DO NOT assume** or proceed automatically
 
 **If "否"**:
 - **Generate final.md**: Same enhancement logic as Phase 5 "否" branch:
@@ -201,7 +214,8 @@ Ask: "是否要更新文案？" (是/否)
 **If "是"**:
 - **Ensure final.md exists**: If not, generate it (same as "否" branch above)
 - **Collect feedback**:
-  - Ask: "选择反馈方式：1) 自由输入  2) 回答预设问题"
+  - **CRITICAL: STOP and ASK user**: "选择反馈方式：1) 自由输入  2) 回答预设问题"
+  - **DO NOT proceed** until user selects an option
   - Option 1: User provides feedback freely
   - Option 2: Ask one by one:
     - "这个skill最让你惊喜的是什么？"
@@ -240,11 +254,13 @@ Ask: "是否要更新文案？" (是/否)
 
 ## Key Principles
 
+- **CRITICAL: Always wait for user input**: When asking questions or presenting options, **STOP and WAIT** for explicit user response. **NEVER proceed automatically** or assume user's choice.
 - **Smooth workflow**: No retries, use available info gracefully
 - **Accessibility first**: Not always hardcore technical, focus on user-friendly content
-- **User control**: User decides installation and experience
+- **User control**: User decides installation and experience - **always wait for explicit confirmation**
 - **Clear sources**: Always note information source in frontmatter
 - **Flexible feedback**: Support both free input and guided questions
+- **Explicit waits**: Use phrases like "STOP and WAIT", "DO NOT proceed", "CRITICAL" to emphasize waiting points
 
 ## Error Handling
 
