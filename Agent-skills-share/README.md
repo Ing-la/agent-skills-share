@@ -32,8 +32,7 @@ Agent-skills-share/
 │       ├── draft.md            # Draft (with frontmatter)
 │       ├── final.md            # Final copywriting (with frontmatter)
 │       ├── technical-review.md # Technical analysis (with frontmatter)
-│       ├── assets/            # Screenshots, recordings, etc.
-│       └── workspace/         # Experimental files
+│       └── workspace/         # Experimental files (created when user chooses to experience the skill)
 └── .cursor/skills/skill-share/ # Main skill file
     └── SKILL.md
 ```
@@ -47,10 +46,12 @@ Agent-skills-share/
 
 1. **Skill Selection**: Smart recommendation → User selects direction → Returns 3 options → User chooses
 2. **Template Selection**: If multiple templates exist, ask for selection (otherwise auto-use)
-3. **Draft Generation**: Generate draft.md based on skills.sh webpage information
+3. **Draft Generation**: Generate draft.md based on skills.sh webpage information (creates skill directory, but NOT workspace yet)
 4. **Installation Decision**: Ask if installation is needed for deep analysis
 5. **Deep Analysis**: Optionally install skill, generate technical-review.md
-6. **Experience Feedback**: Optionally experience skill, collect feedback and update final.md
+6. **Experience Feedback**: 
+   - If user chooses to experience: Create `workspace/` directory, prompt user to test in workspace
+   - Collect feedback and update final.md
 
 ## Document Description
 

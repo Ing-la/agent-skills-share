@@ -57,42 +57,59 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
 
 ### Phase 1: Skill Selection
 
-1. **Recommend Direction**:
+**STEP 1: Recommend Direction**
+1. **Read history and analyze**:
    - Read `Agent-skills-share/daily-posts/RECORD.md` to track history
    - Analyze recent posts for diversity:
      - Last 3 popular → recommend niche/domain-specific
      - Last 3 technical → recommend creative/design
      - Default: popular skills
-   - Present: 1 recommended + 4 alternatives (A/B/C/D)
-   - **CRITICAL: STOP and WAIT for user input** (direct confirm, A/B/C/D, or custom direction)
-   - **DO NOT proceed** until user provides explicit choice
 
-2. **Search & Present**:
-   - Fetch from https://skills.sh/ based on user's selection
+2. **Present options**:
+   - Present: 1 recommended + 4 alternatives (A/B/C/D)
+   - Format: Clear list with labels (A/B/C/D) and descriptions
+   - **Ask user**: "请选择方向 / Please select direction: [A/B/C/D] or type your custom direction"
+
+3. **CRITICAL WAIT POINT - END OF STEP 1**:
+   - **STOP HERE. DO NOT proceed to Step 2.**
+   - **WAIT for user input**: Accept A/B/C/D (case-insensitive) or custom direction text
+   - **DO NOT proceed** until user provides explicit choice
+   - **DO NOT assume** user's selection or proceed automatically
+
+**STEP 2: Search & Present** (ONLY START AFTER USER SELECTS DIRECTION)
+1. **Search skills based on user's direction selection**:
+   - Fetch from https://skills.sh/ based on user's choice from Step 1
    - Extract: name, description, install count
    - Present top 3 matches with format:
      ```
      1. [skill-name] - [core description] (安装数: X.XK)
-        - [key feature 1]
-        - [key feature 2]
-        - 适合 [target audience]
+       - [key feature 1]
+       - [key feature 2]
+       - 适合 [target audience]
      ```
-   - **CRITICAL: STOP and WAIT for user to choose (1/2/3)**
+
+2. **CRITICAL WAIT POINT - END OF STEP 2**:
+   - **STOP HERE. DO NOT proceed to Phase 2.**
+   - **Ask user**: "请选择技能 / Please select a skill: [1/2/3]"
+   - **WAIT for user input**: Accept 1, 2, or 3 (as number or text)
    - **DO NOT proceed** until user selects one of the options
+   - **DO NOT assume** user's choice or proceed automatically
 
 ### Phase 2: Draft Generation
 
-1. **Fetch Information**:
-   - Get skill page from skills.sh: `https://skills.sh/<owner>/<repo>/<skill-name>`
-   - Extract: name, description, install count, GitHub link, owner/repo
+1. **Fetch detailed skill information**:
+   - Get full skill page from skills.sh: `https://skills.sh/<owner>/<repo>/<skill-name>` (selected in Phase 1 Step 2)
+   - Extract detailed information: name, description, install count, GitHub link, owner/repo, full description, features
    - **Note source clearly** in draft frontmatter: "信息来源: skills.sh页面"
 
 2. **Select Template**:
    - **Priority 1**: Check `Agent-skills-share/templates/` directory for available templates
      - If multiple templates found (e.g., `xhs_template.md`, `xhs_template_minimal.md`):
        - List available templates with brief descriptions
-       - **CRITICAL: STOP and ASK user to choose** (or use default `xhs_template.md` if user doesn't respond)
-       - **DO NOT proceed** until user selects a template or explicitly confirms default
+       - **CRITICAL: STOP and ASK user**: "请选择模板 / Please select a template: [list options with numbers 1/2/3...] or [d] for default"
+       - **WAIT for user input**: Accept number (1/2/3...) or 'd' for default
+       - **DO NOT proceed** until user selects a template or explicitly confirms using default
+       - **DO NOT assume** default without user confirmation
      - If only one template found → use it automatically
    - **Priority 2**: If no template in project directory, try to find skill's default template:
      - Check `.cursor/skills/skill-share/templates/xhs_template.md` (if exists)
@@ -102,6 +119,8 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
    - **Priority order**: Project templates > Skill default template (from installation directory)
 
 3. **Generate draft.md**:
+   - Create directory: `Agent-skills-share/daily-posts/YYYY-MM-DD-<skill-name>/`
+   - **Note**: Do NOT create `workspace/` directory at this stage
    - Path: `Agent-skills-share/daily-posts/YYYY-MM-DD-<skill-name>/draft.md`
    - Use selected template
    - **Add frontmatter**:
@@ -116,34 +135,34 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
 
 ### Phase 3: Installation Decision
 
-**CRITICAL: STOP and ASK user**: "是否需要安装完成更详细的技术分析和体验反馈？" (是/否)
-- **DO NOT proceed** until user provides explicit answer (是/否)
+**CRITICAL: STOP and ASK user**: "是否需要安装完成更详细的技术分析和体验反馈？/ Do you want to install the skill for detailed technical analysis and experience feedback? [y/n]"
+- **WAIT for user input**: Accept y/yes/是 or n/no/否 (case-insensitive)
+- **DO NOT proceed** until user provides explicit answer
 - **DO NOT assume** or proceed automatically
 
-**If "否"**:
+**If user answers "n" or "否" or "no"**:
 - Copy `draft.md` to `final.md`
 - **Add frontmatter** to final.md: "信息来源: draft.md (直接复制), 更新说明: 未进行安装和技术分析"
 - Generate brief `technical-review.md` (skills.sh info only, 50-200 words, note: "未进行深度代码分析")
 - **Update RECORD.md** → **End**
 
-**If "是"** → Phase 4
+**If user answers "y" or "是" or "yes"** → Phase 4
 
 ### Phase 4: Installation
 
-**CRITICAL: STOP and ASK user**: "你自己安装还是我安装？" (我自己安装/你安装)
+**CRITICAL: STOP and ASK user**: "你自己安装还是我安装？/ Do you want to install it yourself or should I install it? [m/a] (m=myself/我自己, a=auto/你安装)"
+- **WAIT for user input**: Accept m/myself/我自己 or a/auto/你安装 (case-insensitive)
 - **DO NOT proceed** until user provides explicit choice
 - **DO NOT assume** or proceed automatically
 
-**If "我自己安装"**:
+**If user answers "m" or "myself" or "我自己"**:
 - Provide command: `npx skills add <owner/repo> --skill <skill-name>`
-- Brief guide: "安装过程中会询问安装到哪些agent，可以选择多个或全部"
-- Say: "安装完成后告诉我，我会继续进行分析"
-- **CRITICAL: STOP and WAIT for user confirmation** - Wait for user to explicitly say "安装完成" or similar confirmation
+- Brief guide: "安装过程中会询问安装到哪些agent，可以选择多个或全部 / During installation, you'll be asked which agents to install to, you can select multiple or all"
+- Say: "安装完成后告诉我，我会继续进行分析 / Please tell me when installation is complete, and I'll continue the analysis"
+- **CRITICAL: STOP and WAIT for user confirmation** - Accept: "完成/done/y/yes" or similar confirmation
 - **DO NOT proceed** until user confirms installation is complete
-- Verify: Check `.cursor/skills/<skill-name>/SKILL.md` exists
-- If verified → Phase 5, else ask user to confirm or proceed with web info only
 
-**If "你安装"**:
+**If user answers "a" or "auto" or "你安装"**:
 - Run: `npx skills add <owner/repo> --skill <skill-name> --agent cursor --yes`
 - This installs to `.agents/skills/<skill-name>/`
 - **Copy to target**:
@@ -153,8 +172,11 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
     - Unix: Use `cp -r`
   - Copy other files (README.md, etc.) if they exist
 - Clean up: Remove `.agents/skills/<skill-name>/`
+
+**After installation (both branches)**:
 - Verify: Check `.cursor/skills/<skill-name>/SKILL.md` exists
-- If successful → Phase 5, else inform user and proceed with web info only
+- If verified → Phase 5
+- If verification fails: Ask user to confirm or proceed with web info only
 
 ### Phase 5: Deep Analysis
 
@@ -176,11 +198,12 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
      - Developer Info (50 words, optional)
    - Length: 800-1200 words, concise and professional
 
-3. **CRITICAL: STOP and ASK user**: "是否要体验这个skill？" (是/否)
+3. **CRITICAL: STOP and ASK user**: "是否要体验这个skill？/ Do you want to experience this skill? [y/n]"
+   - **WAIT for user input**: Accept y/yes/是 or n/no/否 (case-insensitive)
    - **DO NOT proceed** until user provides explicit answer
    - **DO NOT assume** or proceed automatically
 
-**If "否"**:
+**If user answers "n" or "否" or "no"**:
 - **Generate final.md**: Enhance draft.md with technical-review.md insights:
   - Read `draft.md` and `technical-review.md`
   - Add technical highlights from code analysis
@@ -192,29 +215,45 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
 - **Add frontmatter**: "信息来源: draft.md + technical-review.md技术分析, 更新说明: 基于技术分析文档更新，未进行实际体验"
 - **Update RECORD.md** → **End**
 
-**If "是"**:
-- Say: "体验完成后告诉我，我会收集反馈并更新文案"
-- **CRITICAL: STOP and WAIT for user confirmation** - Wait for user to explicitly say "体验完成" or similar confirmation
+**If user answers "y" or "是" or "yes"**:
+- **Create workspace directory**:
+  - Create `Agent-skills-share/daily-posts/YYYY-MM-DD-<skill-name>/workspace/` directory
+- **Inform user**:
+  - Say: "已创建 workspace 目录，你可以在 `Agent-skills-share/daily-posts/YYYY-MM-DD-<skill-name>/workspace/` 目录下进行体验和测试。/ Workspace directory created. You can test the skill in the workspace directory."
+  - Say: "体验完成后告诉我，我会收集反馈并更新文案 / Please tell me when you're done experiencing, and I'll collect feedback and update the copywriting"
+- **CRITICAL: STOP and WAIT for user confirmation** - Accept: "完成/done/y/yes" or similar confirmation
 - **DO NOT proceed** to Phase 6 until user confirms experience is complete
 
 ### Phase 6: Feedback & Final Update
 
-**Context**: technical-review.md exists, final.md does NOT exist yet
+**Context**: User chose to experience the skill in Phase 5, completed experience, and confirmed completion. At this point:
+- `technical-review.md` exists (generated in Phase 5)
+- `final.md` does NOT exist yet (will be created in this phase)
 
-**CRITICAL: STOP and ASK user**: "是否要更新文案？" (是/否)
+**CRITICAL: STOP and ASK user**: "是否要更新文案？/ Do you want to update the copywriting? [y/n]"
+- **WAIT for user input**: Accept y/yes/是 or n/no/否 (case-insensitive)
 - **DO NOT proceed** until user provides explicit answer
 - **DO NOT assume** or proceed automatically
 
-**If "否"**:
-- **Generate final.md**: Same enhancement logic as Phase 5 "否" branch:
-  - Enhance draft.md with technical-review.md insights
-  - Add frontmatter: "信息来源: draft.md + technical-review.md技术分析, 更新说明: 基于技术分析文档更新，已体验但未收集反馈"
+**If user answers "n" or "否" or "no"**:
+- **Generate final.md** (enhance draft.md with technical-review.md insights, same logic as Phase 5 "否" branch):
+  - Read `draft.md` and `technical-review.md`
+  - Add technical highlights from code analysis
+  - Refine function descriptions based on deeper understanding
+  - Update target audience if needed
+  - Enhance installation command section
+  - Maintain accessible style, supplement not merge
+- **Add frontmatter**: "信息来源: draft.md + technical-review.md技术分析, 更新说明: 基于技术分析文档更新，已体验但未收集反馈"
 - **Update RECORD.md** → **End**
 
-**If "是"**:
-- **Ensure final.md exists**: If not, generate it (same as "否" branch above)
+**If user answers "y" or "是" or "yes"**:
+- **Generate final.md first** (if not exists, use same enhancement logic as "否" branch above):
+  - Read `draft.md` and `technical-review.md`
+  - Enhance draft.md with technical-review.md insights
+  - Add frontmatter: "信息来源: draft.md + technical-review.md技术分析, 更新说明: 基于技术分析文档更新，准备收集体验反馈"
 - **Collect feedback**:
-  - **CRITICAL: STOP and ASK user**: "选择反馈方式：1) 自由输入  2) 回答预设问题"
+  - **CRITICAL: STOP and ASK user**: "选择反馈方式 / Please select feedback method: [1/2] (1=自由输入/free input, 2=回答预设问题/preset questions)"
+  - **WAIT for user input**: Accept 1 or 2 (as number or text)
   - **DO NOT proceed** until user selects an option
   - Option 1: User provides feedback freely
   - Option 2: Ask one by one:
