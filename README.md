@@ -1,62 +1,52 @@
 # Agent Skills Share
 
-> A skill for generating daily Xiaohongshu (小红书) content about Agent Skills. Automatically selects skills, generates copywriting, and optionally performs deep technical analysis.
+> 每天为 Agent Skills 生成小红书种草内容，从选 skill、写文案到配图一条龙。
 
-## 📦 Install Skill
+## 简介
+
+本项目帮助你持续产出 Agent Skills 相关的小红书内容：从 [skills.sh](https://skills.sh) 选 skill、生成初稿、技术拆解，再到文案转配图，全部由 Agent 辅助完成。内含两个可独立安装的 Skill，可在 [skills.sh](https://skills.sh/Ing-la/agent-skills-share) 检索到。
+
+## 功能
+
+- **skill-share**：选 skill、抓取信息、生成 draft/final 文案，支持深度技术分析
+- **xhs-render**：文案转配图，多套模板可选，输出 3:4 小红书规格 PNG
+
+## 快速开始
+
+### 安装 Skill
+
+两个 skill 可分别安装，按需选择：
 
 ```bash
+# 生成小红书文案
 npx skills add Ing-la/agent-skills-share --skill skill-share
+
+# 文案转配图
+npx skills add Ing-la/agent-skills-share --skill xhs-render
 ```
 
-After installation, the skill will be installed to your `.cursor/skills/skill-share/` or `.agents/skills/skill-share/` directory.
+安装后技能会出现在 `.cursor/skills/`（或对应 agent 目录）。
 
-## 🚀 Quick Start
+### 使用
 
-When using skill-share, it will automatically create the `Agent-skills-share/` working directory in your project root (if it doesn't exist).
+- **skill-share**：在 Cursor 中 @skill-share 或输入 `/skill`，按流程选 skill、生成文案
+- **xhs-render**：在已有文案目录（如 `Agent-skills-share/daily-posts/xxx/`）下，让 Agent 调用 xhs-render 即可完成文案 → blocks.json → 配图
 
-Then use the `/skill` command or invoke `@skill-share` skill to generate daily content.
-
-## 📁 Repository Structure
+## 项目结构
 
 ```
-agent-skills-share/
-├── skill-share/              # Skill source code (shared on skills.sh)
-│   ├── SKILL.md             # Main skill file
-│   └── templates/           # Default templates included with skill
-│       └── xhs_template.md
-├── Agent-skills-share/       # Generated content (pushed to GitHub)
-│   ├── daily-posts/         # Daily generated content
-│   ├── templates/           # User custom templates
-│   └── README.md           # Content documentation
-└── README.md                # This file
+├── skills/                 # 可被 skills.sh 检索的两个 skill 源码
+│   ├── skill-share/
+│   └── xhs-render/
+├── Agent-skills-share/      # 日常生成的内容（文案、配图等）
+└── README.md
 ```
 
-## 🎯 Features
+## 链接
 
-- 🎯 **Smart Recommendations**: Intelligently recommends skill directions based on history
-- 📝 **Auto Generation**: Automatically generates Xiaohongshu copywriting and technical analysis documents
-- 🔍 **Deep Analysis**: Optionally installs skills for code-level deep analysis
-- 💬 **Experience Feedback**: Supports collecting actual usage experience and updating content
-- 📊 **Source Tracking**: Complete tracking of information sources for each document
-- 🛠️ **Auto Initialization**: Automatically creates necessary working directory structure on first use
+- [skills.sh](https://skills.sh/Ing-la/agent-skills-share) - 在 Vercel 技能目录中查看与安装
+- [GitHub](https://github.com/Ing-la/agent-skills-share)
 
-## 📖 Usage
+## 许可
 
-For detailed usage instructions and workflow, see [Agent-skills-share/README.md](Agent-skills-share/README.md).
-
-## 🔗 Links
-
-- [GitHub Repository](https://github.com/Ing-la/agent-skills-share) - Source code and documentation
-- [skills.sh Page](https://skills.sh/) - Agent Skills Directory
-- [Agent-skills-share Content](Agent-skills-share/) - Generated Xiaohongshu content and technical analysis
-
-## 👤 Author & Maintainer
-
-**Ing-la**
-
-- GitHub: [@Ing-la](https://github.com/Ing-la)
-- Skills.sh: [Ing-la/agent-skills-share](https://skills.sh/Ing-la/agent-skills-share)
-
-## 📄 License
-
-MIT License
+MIT

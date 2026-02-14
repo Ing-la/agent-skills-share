@@ -100,29 +100,27 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
 1. **Fetch detailed skill information**:
    - Get full skill page from skills.sh: `https://skills.sh/<owner>/<repo>/<skill-name>` (selected in Phase 1 Step 2)
    - Extract detailed information: name, description, install count, GitHub link, owner/repo, full description, features
+   - **Generate skill-source.md** (before draft): 创建目录 `Agent-skills-share/daily-posts/YYYY-MM-DD-<skill-name>/`（若不存在）。将抓取内容整理成结构化文档，提取 name、description、features、usage、install、credits 等有价值部分，去掉导航、页脚、推荐列表等无关内容。写入 `skill-source.md`。格式为易读的 markdown，供 xhs-render 作设计参考。
    - **Note source clearly** in draft frontmatter: "信息来源: skills.sh页面"
 
 2. **Select Template**:
-   - **Priority 1**: Check `Agent-skills-share/templates/` directory for available templates
-     - If multiple templates found (e.g., `xhs_template.md`, `xhs_template_minimal.md`):
-       - List available templates with brief descriptions
-       - **CRITICAL: STOP and ASK user**: "请选择模板 / Please select a template: [list options with numbers 1/2/3...] or [d] for default"
-       - **WAIT for user input**: Accept number (1/2/3...) or 'd' for default
-       - **DO NOT proceed** until user selects a template or explicitly confirms using default
-       - **DO NOT assume** default without user confirmation
-     - If only one template found → use it automatically
-   - **Priority 2**: If no template in project directory, try to find skill's default template:
-     - Check `.cursor/skills/skill-share/templates/xhs_template.md` (if exists)
-     - Or check `.agents/skills/skill-share/templates/xhs_template.md` (if exists)
-     - Use the first found template
-   - **Priority 3**: If still not found, inform user and proceed without template (generate from scratch)
-   - **Priority order**: Project templates > Skill default template (from installation directory)
+   - **Scan both sources** for style templates (`.md` 文件，排除非风格模板)：
+     - Skill 内置：`.cursor/skills/skill-share/templates/`（如 xhs-cute.md，后续可扩展 xhs-notion、xhs-hardcore 等）
+     - 用户项目：`Agent-skills-share/templates/`（如 xhs_template_playful.md、xhs_template_hardcore.md）
+   - **合并去重**：将两处找到的模板合并为一份列表，按文件名排序后展示
+   - **交互**：
+     - 若找到 0 个 → 直接按内容清单生成，不使用模板
+     - 若找到 1 个 → 自动使用
+     - 若找到 2 个及以上 → 列出所有选项，**CRITICAL: STOP and ASK user**："请选择风格 / Please select a style: [1/2/3...] 对应各模板"
+   - **WAIT for user input**，DO NOT proceed until user selects
 
 3. **Generate draft.md**:
    - Create directory: `Agent-skills-share/daily-posts/YYYY-MM-DD-<skill-name>/`
    - **Note**: Do NOT create `workspace/` directory at this stage
    - Path: `Agent-skills-share/daily-posts/YYYY-MM-DD-<skill-name>/draft.md`
-   - Use selected template
+   - **Use template as style reference** (not fill-in): Template shows tone and must-have elements; section structure and naming are yours to decide based on skill characteristics.
+   - **Must include**: hook opening, features/highlights, target audience, install command, developer credits, hashtags. Optionally add: usage notes, technical details, hands-on feedback.
+   - **Output format: XHS-ready** — use `【小节名】` for sections (no `##`), no `**` for bold, links as `[text](url)`, install command on its own line without code fences. Emoji allowed in body.
    - **Add frontmatter**:
      ```markdown
      ---
@@ -130,7 +128,6 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
      生成时间: YYYY-MM-DD HH:MM:SS
      ---
      ```
-   - Structure: Title, Opening, Functions, Audience, Installation command, Tags
    - Length: 300-500 words, accessible style (not hardcore technical)
 
 ### Phase 3: Installation Decision
@@ -141,7 +138,7 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
 - **DO NOT assume** or proceed automatically
 
 **If user answers "n" or "否" or "no"**:
-- Copy `draft.md` to `final.md`
+- Copy `draft.md` to `final.md` (draft is already XHS-ready)
 - **Add frontmatter** to final.md: "信息来源: draft.md (直接复制), 更新说明: 未进行安装和技术分析"
 - Generate brief `technical-review.md` (skills.sh info only, 50-200 words, note: "未进行深度代码分析")
 - **Update RECORD.md** → **End**
@@ -210,7 +207,7 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
   - Refine function descriptions based on deeper understanding
   - Update target audience if needed
   - Enhance installation command section
-  - **Important**: final.md is still Xiaohongshu copywriting, not technical doc
+  - **Important**: final.md is Xiaohongshu copywriting, not technical doc. **Output XHS-ready format**: `【】` sections, no `##`/`**`, links as `[text](url)`
   - Maintain accessible style, supplement not merge
 - **Add frontmatter**: "信息来源: draft.md + technical-review.md技术分析, 更新说明: 基于技术分析文档更新，未进行实际体验"
 - **Update RECORD.md** → **End**
@@ -242,6 +239,7 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
   - Refine function descriptions based on deeper understanding
   - Update target audience if needed
   - Enhance installation command section
+  - **Output XHS-ready format**: `【】` sections, no `##`/`**`, links as `[text](url)`
   - Maintain accessible style, supplement not merge
 - **Add frontmatter**: "信息来源: draft.md + technical-review.md技术分析, 更新说明: 基于技术分析文档更新，已体验但未收集反馈"
 - **Update RECORD.md** → **End**
@@ -250,6 +248,7 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
 - **Generate final.md first** (if not exists, use same enhancement logic as "否" branch above):
   - Read `draft.md` and `technical-review.md`
   - Enhance draft.md with technical-review.md insights
+  - **Output XHS-ready format**: `【】` sections, no `##`/`**`, links as `[text](url)`
   - Add frontmatter: "信息来源: draft.md + technical-review.md技术分析, 更新说明: 基于技术分析文档更新，准备收集体验反馈"
 - **Collect feedback**:
   - **CRITICAL: STOP and ASK user**: "选择反馈方式 / Please select feedback method: [1/2] (1=自由输入/free input, 2=回答预设问题/preset questions)"
@@ -263,10 +262,17 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
 - **Update final.md** with feedback:
   - Maintain original structure, update content
   - Can add: actual usage experience, real scenarios, notes, improvement suggestions
+  - Keep XHS-ready format
 - **Update frontmatter**: "信息来源: draft.md + technical-review.md技术分析 + 实际体验反馈, 更新说明: 基于技术分析和实际体验更新"
 - **Update RECORD.md** → **End**
 
 ## Document Structure
+
+**skill-source.md** (Phase 2 生成):
+- 来自 skills.sh 抓取，提取 name、description、features、usage、install、credits 等，去掉无关内容。供 xhs-render 作设计参考。
+
+**final.md**:
+- XHS-ready，可直接复制到小红书。用 `【小节名】` 作分隔，不用 `##`/`**`，链接 `[文字](url)`，安装命令独立成行无代码块。
 
 **Frontmatter format** (all documents):
 ```markdown

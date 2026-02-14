@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1242px;
+      height: 1660px;
+      font-family: "PingFang SC", "SF Pro Display", "Helvetica Neue", sans-serif;
+      background: #fefefe;
+      padding: 88px 80px 160px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    body::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 80px; right: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #e5e5e5 20%, #e5e5e5 80%, transparent);
+    }
+    body.role-cover { text-align: center; }
+    body.role-ending { text-align: center; }
+    .emoji {
+      font-size: 46px;
+      margin-bottom: 28px;
+      line-height: 1;
+    }
+    .title {
+      font-size: 50px;
+      font-weight: 600;
+      color: #0a0a0a;
+      line-height: 1.3;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+    body.role-cover .title {
+      font-size: 60px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 32px;
+    }
+    .title-dots {
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: 40px;
+    }
+    .title-dots .dot { display: none; }
+    body.role-cover .title-dots,
+    body.role-ending .title-dots { justify-content: center; }
+    .title-dots::after {
+      content: "";
+      width: 48px;
+      height: 2px;
+      background: #0a0a0a;
+    }
+    .content {
+      font-size: 36px;
+      line-height: 1.85;
+      color: #2c2c2c;
+      letter-spacing: 0.01em;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  </style>
+</head>
+<body class="role-{{role}}">
+  {{EMOJI_BLOCK}}
+  {{TITLE_BLOCK}}
+  <div class="content">{{content}}</div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1242px;
+      height: 1660px;
+      font-family: "PingFang SC", "Inter", "Helvetica Neue", sans-serif;
+      background: linear-gradient(180deg, #f7f7f5 0%, #efefec 100%);
+      padding: 56px 64px 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    .note-card {
+      padding: 48px 56px 56px 64px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+      border-left: 4px solid #2383e2;
+      position: relative;
+    }
+    body.role-cover .note-card,
+    body.role-ending .note-card { text-align: center; border-left: none; border-top: 4px solid #2383e2; }
+    .emoji {
+      font-size: 42px;
+      margin-bottom: 22px;
+      line-height: 1;
+      opacity: 0.95;
+    }
+    .title {
+      font-size: 46px;
+      font-weight: 600;
+      color: #37352f;
+      line-height: 1.35;
+      margin-bottom: 18px;
+      letter-spacing: 0.01em;
+    }
+    body.role-cover .title {
+      font-size: 54px;
+      font-weight: 700;
+      color: #2c2c2c;
+      margin-bottom: 24px;
+    }
+    .title-dots {
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: 32px;
+    }
+    .title-dots .dot { display: none; }
+    body.role-cover .title-dots,
+    body.role-ending .title-dots { justify-content: center; }
+    .title-dots::after {
+      content: "";
+      width: 40px;
+      height: 3px;
+      background: #2383e2;
+      border-radius: 2px;
+    }
+    .content {
+      font-size: 36px;
+      line-height: 1.8;
+      color: #4b4b4b;
+      letter-spacing: 0.01em;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  </style>
+</head>
+<body class="role-{{role}}">
+  <div class="note-card">
+    {{EMOJI_BLOCK}}
+    {{TITLE_BLOCK}}
+    <div class="content">{{content}}</div>
+  </div>
+</body>
+</html>
