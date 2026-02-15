@@ -45,12 +45,12 @@ LLM 全权决定分几张、标题、布局等，生成时需遵守：
 
 ## 可用模板（均为 .html 单文件）
 
-- minimal、cute、notion、bold、warm、ing-minimal、showcase
+- ing-minimal（推荐）、notion、memo
 
 ## 脚本
 
 ```bash
 # source: final(默认) | draft | custom
 python .cursor/skills/xhs-render/scripts/get_output_dir.py <文案目录> --source final
-python .cursor/skills/xhs-render/scripts/render_images.py <输出目录>/blocks.json -t minimal -o <输出目录>
+python .cursor/skills/xhs-render/scripts/render_images.py <输出目录>/blocks.json -t ing-minimal -o <输出目录>
 ```

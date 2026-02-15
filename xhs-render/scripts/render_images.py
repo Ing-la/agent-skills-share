@@ -139,7 +139,7 @@ def _find_browser() -> str | None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Render XHS blocks to PNG images")
     parser.add_argument("blocks_file", help="JSON file with blocks")
-    parser.add_argument("-t", "--template", default="minimal", help="Template name")
+    parser.add_argument("-t", "--template", default="ing-minimal", help="Template name (ing-minimal, notion)")
     parser.add_argument("-o", "--output", default="xhs-render", help="Output directory")
     args = parser.parse_args()
 

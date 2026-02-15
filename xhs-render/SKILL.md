@@ -13,8 +13,8 @@ metadata:
 ## 流程
 
 1. **选模板（先与用户交互）**：列出可选模板，询问用户选择，待用户确认后再继续。
-   - 可选：minimal、cute、notion、notion-math、bold、warm、ing-minimal、ing-minimal-math、showcase
-   - 示例：「可选模板：minimal（极简白底）、cute（粉白甜美）、notion（知识卡片风）、bold（深色强视觉）、warm（暖黄）、ing-minimal（品牌简约）。请问用哪个？」→ 用户回复后记下，后续用 `-t <所选>`
+   - 可选：ing-minimal、notion、memo
+   - 示例：「可选模板：ing-minimal（品牌简约，推荐）、notion（知识卡片风）、memo（备忘录标签风）。请问用哪个？」→ 用户回复后记下，后续用 `-t <所选>`
 
 2. **定位文档**：
    - 用户指定文案目录（如 `Agent-skills-share/daily-posts/YYYY-MM-DD-<skill-name>`）或具体文件
@@ -67,15 +67,9 @@ metadata:
 
 | 名称 | 说明 |
 |------|------|
-| minimal | 极简白底黑字 |
-| cute | 粉白渐变，甜美 |
-| notion | 浅灰底，知识卡片风 |
-| notion-math | 同 notion，支持 $$...$$ LaTeX 数学公式 |
-| bold | 深色底，强视觉 |
-| warm | 暖黄渐变，温暖 |
-| ing-minimal | 品牌感简约，页眉「线—Ing—线」，安利 skill 专用 |
-| ing-minimal-math | 同 ing-minimal，支持 $$...$$ LaTeX 数学公式 |
-| showcase | 炫技款：Art Deco 几何、金线边框、菱形网格、圆形/三角装饰 |
+| ing-minimal | 品牌感简约，页眉「线—Ing—线」，安利 skill 专用，支持 $$...$$ LaTeX 数学公式（推荐） |
+| notion | 井字格背景，知识卡片风，内容直接显示在网格上 |
+| memo | 备忘录风格，浅蓝数字标签 + 粗体标题，内容按段落填充、带圆点排版 |
 
 纯标签页自动跳过，无页码。
 
