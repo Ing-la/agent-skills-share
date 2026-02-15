@@ -56,7 +56,27 @@ def is_tags_only_block(block: dict) -> bool:
             block.get("text", "").count("#") >= 2)
 
 
-def build_block_html(block: dict, template: str) -> str:
+def _extract_page_bg(template: str) -> str:
+    """从模板提取页面背景色（用于 html2image 与 html 兜底）。
+    优先解析 /* xhs-page-bg: #RRGGBB */，否则取 body background 第一个 hex。
+    返回无 # 的六位十六进制，如 fefefe。
+    """
+    # 显式声明优先
+    m = re.search(r"/\*\s*xhs-page-bg:\s*#([0-9a-fA-F]{6})\s*\*/", template)
+    if m:
+        return m.group(1).upper()
+    # 从 body 的 background 取第一个 #RRGGBB
+    m = re.search(
+        r"body\s*\{[^}]*background[^#]*(#[0-9a-fA-F]{6})",
+        template,
+        re.DOTALL,
+    )
+    if m:
+        return m.group(1)[1:].upper()  # 去掉 #
+    return "FFFFFF"
+
+
+def build_block_html(block: dict, template: str, page_bg_hex: str) -> str:
     """将 block 填充进模板，返回完整 HTML。"""
     emoji_val = block.get("emoji", "").strip()
     title_val = block.get("title", "").strip()
@@ -78,14 +98,15 @@ def build_block_html(block: dict, template: str) -> str:
     ):
         html = html.replace(f"{{{{{k}}}}}", str(v or ""))
     html = re.sub(r"\{\{[^}]+\}\}", "", html)  # 清除未替换占位符
-    return _inject_viewport_styles(html)
+    return _inject_viewport_styles(html, page_bg_hex)
 
 
-def _inject_viewport_styles(html: str) -> str:
-    """注入 viewport 约束，避免截到浏览器 chrome。"""
+def _inject_viewport_styles(html: str, page_bg_hex: str = "FFFFFF") -> str:
+    """注入 viewport 约束与 html 背景，避免截到浏览器 chrome 或露出黑/白条。"""
+    bg = f"#{page_bg_hex}"
     styles = (
         f"html,body{{margin:0!important;padding:0!important;overflow:hidden!important;}}"
-        f"html{{width:{WIDTH}px!important;height:{HEIGHT}px!important;}}"
+        f"html{{width:{WIDTH}px!important;height:{HEIGHT}px!important;background:{bg}!important;}}"
         f"body{{min-width:{WIDTH}px!important;min-height:{HEIGHT}px!important;"
         f"max-width:{WIDTH}px!important;max-height:{HEIGHT}px!important;}}"
     )
@@ -133,9 +154,22 @@ def main() -> None:
         print("Error: html2image not installed. Run: pip install html2image", file=sys.stderr)
         sys.exit(1)
 
-    hti = Html2Image(size=(WIDTH, HEIGHT), output_path=str(out_dir))
+    # 从模板提取背景色，避免深色模板出现白条、浅色模板出现黑条
+    page_bg = _extract_page_bg(template)
+    hti = Html2Image(
+        size=(WIDTH, HEIGHT),
+        output_path=str(out_dir),
+        custom_flags=[
+            f"--default-background-color={page_bg}",
+            "--hide-scrollbars",
+        ],
+    )
     if (exe := _find_browser()):
         hti.browser.executable = exe
+
+    # 使用 html_file 而非 html_str：html2image 对 html_str 会再包一层结构，导致嵌套布局、底部黑条
+    temp_html_dir = out_dir / ".temp_html"
+    temp_html_dir.mkdir(exist_ok=True)
 
     output_paths = []
     for block in blocks:
@@ -143,18 +177,29 @@ def main() -> None:
             print(f"Skipped tags-only block {block.get('index')}", file=sys.stderr)
             continue
 
-        html = build_block_html(block, template)
+        html = build_block_html(block, template, page_bg)
         fname = f"{block.get('index', 0):02d}-{block.get('role', 'content')}.png"
         out_path = out_dir / fname
 
         try:
-            hti.screenshot(html_str=html, save_as=fname, size=(WIDTH, HEIGHT))
+            html_path = temp_html_dir / fname.replace(".png", ".html")
+            html_path.write_text(html, encoding="utf-8")
+            hti.screenshot(html_file=str(html_path), save_as=fname, size=(WIDTH, HEIGHT))
+            html_path.unlink(missing_ok=True)
             _crop_to_canvas(out_path)
             output_paths.append(str(out_path))
             print(f"Rendered: {out_path}", file=sys.stderr)
         except Exception as e:
             print(f"Error rendering block {block.get('index')}: {e}", file=sys.stderr)
             sys.exit(1)
+
+    try:
+        if temp_html_dir.exists():
+            for f in temp_html_dir.iterdir():
+                f.unlink(missing_ok=True)
+            temp_html_dir.rmdir()
+    except OSError:
+        pass
 
     print(json.dumps({"output_dir": str(out_dir), "files": output_paths}))
 

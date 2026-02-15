@@ -35,9 +35,8 @@ npx skills add Ing-la/agent-skills-share --skill xhs-render
 ## 项目结构
 
 ```
-├── skills/                 # 可被 skills.sh 检索的两个 skill 源码
-│   ├── skill-share/
-│   └── xhs-render/
+├── skill-share/            # 可被 skills.sh 检索
+├── xhs-render/             # 可被 skills.sh 检索
 ├── Agent-skills-share/      # 日常生成的内容（文案、配图等）
 └── README.md
 ```

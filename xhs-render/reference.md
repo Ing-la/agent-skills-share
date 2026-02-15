@@ -35,6 +35,14 @@ LLM 全权决定分几张、标题、布局等，生成时需遵守：
 
 3:4 比例，1242×1660 像素。
 
+## 渲染实现
+
+脚本使用 `html_file` 而非 `html_str`：html2image 对 `html_str` 会再包一层 `<html><body>...</body></html>`，导致我们的完整文档被嵌套，布局错位、底部露出默认背景色（黑条）。通过将 HTML 写入临时文件后以 `html_file` 加载，直接渲染完整文档，避免嵌套。
+
+## 模板背景色（兜底）
+
+每个模板在 `<style>` 内声明 `/* xhs-page-bg: #RRGGBB */`，用于 `--default-background-color` 与 html 兜底。未声明时从 body background 取第一个 hex。
+
 ## 可用模板（均为 .html 单文件）
 
 - minimal、cute、notion、bold、warm、ing-minimal、showcase
