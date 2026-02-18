@@ -32,3 +32,51 @@
 - **draft.md信息来源**: skills.sh页面 | [链接](daily-posts/2026-02-06-frontend-design/draft.md)
 - **final.md信息来源**: draft.md + technical-review.md技术分析 + 实际体验反馈 | [链接](daily-posts/2026-02-06-frontend-design/final.md)
 - **technical-review.md信息来源**: 已安装skill分析 (.cursor/skills/frontend-design/SKILL.md) | [链接](daily-posts/2026-02-06-frontend-design/technical-review.md)
+
+## 2026-02-10 - brainstorming
+
+- **Skill**: [brainstorming](https://skills.sh/obra/superpowers/brainstorming)
+- **状态**: ✅ 已完成
+- **draft.md信息来源**: skills.sh页面 | [链接](daily-posts/2026-02-10-brainstorming/draft.md)
+- **final.md信息来源**: draft.md (直接复制) | [链接](daily-posts/2026-02-10-brainstorming/final.md)
+- **technical-review.md信息来源**: skills.sh页面信息 | [链接](daily-posts/2026-02-10-brainstorming/technical-review.md)
+
+## 2026-02-10 - pdf
+
+- **Skill**: [pdf](https://skills.sh/anthropics/skills/pdf)
+- **状态**: ✅ 已完成
+- **draft.md信息来源**: skills.sh页面 | [链接](daily-posts/2026-02-10-pdf/draft.md)
+- **final.md信息来源**: draft.md + technical-review.md技术分析 + 实际体验反馈 | [链接](daily-posts/2026-02-10-pdf/final.md)
+- **technical-review.md信息来源**: 已安装skill分析 (.cursor/skills/pdf/SKILL.md + scripts/) | [链接](daily-posts/2026-02-10-pdf/technical-review.md)
+
+## 2026-02-12 - agent-browser
+
+- **Skill**: [agent-browser](https://skills.sh/vercel-labs/agent-browser/agent-browser)
+- **状态**: ✅ 已完成
+- **draft.md信息来源**: skills.sh页面 | [链接](daily-posts/2026-02-12-agent-browser/draft.md)
+- **final.md信息来源**: draft.md (直接复制) | [链接](daily-posts/2026-02-12-agent-browser/final.md)
+- **technical-review.md信息来源**: skills.sh页面信息 | [链接](daily-posts/2026-02-12-agent-browser/technical-review.md)
+
+## 2026-02-13 - baoyu-xhs-images
+
+- **Skill**: [baoyu-xhs-images](https://skills.sh/jimliu/baoyu-skills/baoyu-xhs-images)
+- **状态**: ✅ 已完成
+- **draft.md信息来源**: skills.sh页面 | [链接](daily-posts/2026-02-13-baoyu-xhs-images/draft.md)
+- **final.md信息来源**: draft.md + technical-review.md技术分析 + 实际体验反馈 | [链接](daily-posts/2026-02-13-baoyu-xhs-images/final.md)
+- **technical-review.md信息来源**: 已安装skill分析 (.cursor/skills/baoyu-xhs-images/SKILL.md + references/) | [链接](daily-posts/2026-02-13-baoyu-xhs-images/technical-review.md)
+
+## 2026-02-14 - find-skills
+
+- **Skill**: [find-skills](https://skills.sh/vercel-labs/skills/find-skills)
+- **状态**: ✅ 已完成
+- **draft.md信息来源**: skills.sh页面 | [链接](daily-posts/2026-02-14-find-skills/draft.md)
+- **final.md信息来源**: draft.md (直接复制) | [链接](daily-posts/2026-02-14-find-skills/final.md)
+- **technical-review.md信息来源**: skills.sh页面信息 | [链接](daily-posts/2026-02-14-find-skills/technical-review.md)
+
+## 2026-02-14 - audit-website
+
+- **Skill**: [audit-website](https://skills.sh/squirrelscan/skills/audit-website)
+- **状态**: ✅ 已完成
+- **draft.md信息来源**: skills.sh页面 | [链接](daily-posts/2026-02-14-audit-website/draft.md)
+- **final.md信息来源**: draft.md (直接复制) | [链接](daily-posts/2026-02-14-audit-website/final.md)
+- **technical-review.md信息来源**: skills.sh页面信息 | [链接](daily-posts/2026-02-14-audit-website/technical-review.md)

@@ -18,13 +18,13 @@ metadata:
 
 2. **定位文档**：
    - 用户指定文案目录（如 `Agent-skills-share/daily-posts/YYYY-MM-DD-<skill-name>`）或具体文件
-   - **优先顺序**：用户明确指定文档时，以用户指定为准；否则若目录有 `skill-source.md` 则读它；否则默认 `final.md`
+   - **优先顺序**：用户指定哪个就读哪个；未指定则默认 `final.md`
    - 用户说「渲染 draft」→ 读 `draft.md`；说「渲染 final」或未指定 → 读 `final.md`；指定其他（如 `my-copy.md`）→ 读该文档
 
 3. **创建工作目录**：
    - `python .cursor/skills/xhs-render/scripts/get_output_dir.py <文案目录> --source <source>`
    - source：用户指定 draft 时用 `draft`，指定其他自定义文档时用 `custom`，否则 `final`
-   - 输出如 `xhs-render/from-final-v1`、`from-draft-v1`、`from-custom-v1`
+   - 输出目录：`<文案目录>/xhs-render/from-{source}-v{N}/`（如 `from-final-v1`、`from-draft-v1`）
 
 4. **LLM 设计 blocks.json 与 xhs-copy**（一次产出）：
    - 读取定位到的文档
@@ -55,6 +55,8 @@ metadata:
 - **role**: cover（仅第 1 块）| content | ending（若仅为 hashtag 则跳过渲染）
 - **title、emoji**：均可为空，由你判断
 - 脚本按 blocks.json 渲染，纯标签页自动跳过
+
+**设计约束**（LLM 设计时需遵守）：Cover text ≤ 2 行且须体现 skill 名；多要点用 `\n\n` 分隔；ending 放致谢开发者、不放安装命令；页数可多可少
 
 ## xhs-copy 规范
 

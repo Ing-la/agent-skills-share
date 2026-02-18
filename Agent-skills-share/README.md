@@ -23,24 +23,20 @@ Use the `/skill` command or invoke `@skill-share` skill to generate daily conten
 ```
 Agent-skills-share/
 ├── README.md                    # Project introduction (this file)
-├── templates/                  # Template directory
-│   ├── xhs_template.md        # Default template (if multiple templates exist, will ask for selection)
-│   └── [other templates].md   # Supports multiple templates, e.g., xhs_template_minimal.md
+├── templates/                  # Optional: custom 文案风格模板 (.md); if empty, skill uses built-in
 ├── daily-posts/                 # Daily content directory
 │   ├── RECORD.md               # Detailed records of all skills
 │   └── YYYY-MM-DD-skill-name/  # Content for each skill
 │       ├── draft.md            # Draft (with frontmatter)
 │       ├── final.md            # Final copywriting (with frontmatter)
 │       ├── technical-review.md # Technical analysis (with frontmatter)
-│       └── workspace/         # Experimental files (created when user chooses to experience the skill)
-└── .cursor/skills/skill-share/ # Main skill file
-    └── SKILL.md
+│       └── workspace/         # Optional: created when user chooses to experience the skill
+└── skill-share/                 # skill-share skill (in repo root)
 ```
 
-**Template Selection Logic**:
-- Priority: Use templates in project directory `templates/`
-- If multiple templates found, list and ask for selection
-- If no template in project directory, use skill's default template
+**Template Selection** (文案风格模板 .md, distinct from xhs-render's 配图渲染模板 .html):
+- Scans `templates/` and skill's built-in templates
+- If multiple found → ask user to select; if one → auto-use; if none → generate without template
 
 ## Workflow
 

@@ -8,8 +8,8 @@
 
 ## 功能
 
-- **skill-share**：选 skill、抓取信息、生成 draft/final 文案，支持深度技术分析
-- **xhs-render**：文案转配图，支持 ing-minimal、ing-notion、ing-skillshare 及 share 品牌 minimal、notion、skillshare，输出 3:4 小红书规格 PNG
+- **skill-share**：选 skill、抓取信息、生成 draft / technical-review / final 文案，支持深度技术分析；可与 xhs-render 联动
+- **xhs-render**：文案转配图（配图渲染模板 .html），支持 ing-minimal、ing-notion、ing-skillshare 及 share 品牌，输出 3:4 小红书规格 PNG
 
 ## 快速开始
 

@@ -11,7 +11,7 @@ metadata:
 
 ## Overview
 
-Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently selects skills, generates copywriting, and optionally installs for deep technical analysis.
+Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently selects skills, generates copywriting, and optionally installs for deep technical analysis. 可与 xhs-render 配合，将 final.md 转为配图。
 
 ## Workflow
 
@@ -70,11 +70,7 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
    - Format: Clear list with labels (A/B/C/D) and descriptions
    - **Ask user**: "请选择方向 / Please select direction: [A/B/C/D] or type your custom direction"
 
-3. **CRITICAL WAIT POINT - END OF STEP 1**:
-   - **STOP HERE. DO NOT proceed to Step 2.**
-   - **WAIT for user input**: Accept A/B/C/D (case-insensitive) or custom direction text
-   - **DO NOT proceed** until user provides explicit choice
-   - **DO NOT assume** user's selection or proceed automatically
+3. **【Wait Point】** 请选择方向 [A/B/C/D] 或输入自定义方向
 
 **STEP 2: Search & Present** (ONLY START AFTER USER SELECTS DIRECTION)
 1. **Search skills based on user's direction selection**:
@@ -88,31 +84,22 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
        - 适合 [target audience]
      ```
 
-2. **CRITICAL WAIT POINT - END OF STEP 2**:
-   - **STOP HERE. DO NOT proceed to Phase 2.**
-   - **Ask user**: "请选择技能 / Please select a skill: [1/2/3]"
-   - **WAIT for user input**: Accept 1, 2, or 3 (as number or text)
-   - **DO NOT proceed** until user selects one of the options
-   - **DO NOT assume** user's choice or proceed automatically
+2. **【Wait Point】** 请选择技能 [1/2/3]
 
 ### Phase 2: Draft Generation
 
 1. **Fetch detailed skill information**:
    - Get full skill page from skills.sh: `https://skills.sh/<owner>/<repo>/<skill-name>` (selected in Phase 1 Step 2)
    - Extract detailed information: name, description, install count, GitHub link, owner/repo, full description, features
-   - **Generate skill-source.md** (before draft): 创建目录 `Agent-skills-share/daily-posts/YYYY-MM-DD-<skill-name>/`（若不存在）。将抓取内容整理成结构化文档，提取 name、description、features、usage、install、credits 等有价值部分，去掉导航、页脚、推荐列表等无关内容。写入 `skill-source.md`。格式为易读的 markdown，供 xhs-render 作设计参考。
    - **Note source clearly** in draft frontmatter: "信息来源: skills.sh页面"
 
-2. **Select Template**:
-   - **Scan both sources** for style templates (`.md` 文件，排除非风格模板)：
-     - Skill 内置：`.cursor/skills/skill-share/templates/`（如 xhs-cute.md，后续可扩展 xhs-notion、xhs-hardcore 等）
-     - 用户项目：`Agent-skills-share/templates/`（如 xhs_template_playful.md、xhs_template_hardcore.md）
-   - **合并去重**：将两处找到的模板合并为一份列表，按文件名排序后展示
+2. **Select 文案风格模板**（.md 文件，与 xhs-render 的配图渲染模板 .html 不同）：
+   - **Scan both sources**：`.cursor/skills/skill-share/templates/`、`Agent-skills-share/templates/`（如 xhs-cute.md、xhs_template_xxx.md 若存在）
+   - **合并去重**：将两处找到的 .md 模板合并为一份列表，按文件名排序后展示
    - **交互**：
      - 若找到 0 个 → 直接按内容清单生成，不使用模板
      - 若找到 1 个 → 自动使用
-     - 若找到 2 个及以上 → 列出所有选项，**CRITICAL: STOP and ASK user**："请选择风格 / Please select a style: [1/2/3...] 对应各模板"
-   - **WAIT for user input**，DO NOT proceed until user selects
+     - 若找到 2 个及以上 → **【Wait Point】** 请选择风格 [1/2/3...] 对应各模板
 
 3. **Generate draft.md**:
    - Create directory: `Agent-skills-share/daily-posts/YYYY-MM-DD-<skill-name>/`
@@ -132,10 +119,7 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
 
 ### Phase 3: Installation Decision
 
-**CRITICAL: STOP and ASK user**: "是否需要安装完成更详细的技术分析和体验反馈？/ Do you want to install the skill for detailed technical analysis and experience feedback? [y/n]"
-- **WAIT for user input**: Accept y/yes/是 or n/no/否 (case-insensitive)
-- **DO NOT proceed** until user provides explicit answer
-- **DO NOT assume** or proceed automatically
+**【Wait Point】** 是否需要安装完成更详细的技术分析？ [y/n]
 
 **If user answers "n" or "否" or "no"**:
 - Copy `draft.md` to `final.md` (draft is already XHS-ready)
@@ -147,17 +131,13 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
 
 ### Phase 4: Installation
 
-**CRITICAL: STOP and ASK user**: "你自己安装还是我安装？/ Do you want to install it yourself or should I install it? [m/a] (m=myself/我自己, a=auto/你安装)"
-- **WAIT for user input**: Accept m/myself/我自己 or a/auto/你安装 (case-insensitive)
-- **DO NOT proceed** until user provides explicit choice
-- **DO NOT assume** or proceed automatically
+**【Wait Point】** 你自己安装还是我安装？ [m/a] (m=我自己, a=你安装)
 
 **If user answers "m" or "myself" or "我自己"**:
 - Provide command: `npx skills add <owner/repo> --skill <skill-name>`
 - Brief guide: "安装过程中会询问安装到哪些agent，可以选择多个或全部 / During installation, you'll be asked which agents to install to, you can select multiple or all"
-- Say: "安装完成后告诉我，我会继续进行分析 / Please tell me when installation is complete, and I'll continue the analysis"
-- **CRITICAL: STOP and WAIT for user confirmation** - Accept: "完成/done/y/yes" or similar confirmation
-- **DO NOT proceed** until user confirms installation is complete
+- Say: "安装完成后告诉我，我会继续进行分析"
+- **【Wait Point】** 等待用户确认安装完成
 
 **If user answers "a" or "auto" or "你安装"**:
 - Run: `npx skills add <owner/repo> --skill <skill-name> --agent cursor --yes`
@@ -195,21 +175,10 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
      - Developer Info (50 words, optional)
    - Length: 800-1200 words, concise and professional
 
-3. **CRITICAL: STOP and ASK user**: "是否要体验这个skill？/ Do you want to experience this skill? [y/n]"
-   - **WAIT for user input**: Accept y/yes/是 or n/no/否 (case-insensitive)
-   - **DO NOT proceed** until user provides explicit answer
-   - **DO NOT assume** or proceed automatically
+3. **【Wait Point】** 是否要体验这个 skill？ [y/n]
 
 **If user answers "n" or "否" or "no"**:
-- **Generate final.md**: Enhance draft.md with technical-review.md insights:
-  - Read `draft.md` and `technical-review.md`
-  - Add technical highlights from code analysis
-  - Refine function descriptions based on deeper understanding
-  - Update target audience if needed
-  - Enhance installation command section
-  - **Important**: final.md is Xiaohongshu copywriting, not technical doc. **Output XHS-ready format**: `【】` sections, no `##`/`**`, links as `[text](url)`
-  - Maintain accessible style, supplement not merge
-- **Add frontmatter**: "信息来源: draft.md + technical-review.md技术分析, 更新说明: 基于技术分析文档更新，未进行实际体验"
+- **Generate final.md**（按 Document Structure 中的 generate_final.md 规则），frontmatter 更新说明：基于技术分析文档更新，未进行实际体验
 - **Update RECORD.md** → **End**
 
 **If user answers "y" or "是" or "yes"**:
@@ -217,9 +186,8 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
   - Create `Agent-skills-share/daily-posts/YYYY-MM-DD-<skill-name>/workspace/` directory
 - **Inform user**:
   - Say: "已创建 workspace 目录，你可以在 `Agent-skills-share/daily-posts/YYYY-MM-DD-<skill-name>/workspace/` 目录下进行体验和测试。/ Workspace directory created. You can test the skill in the workspace directory."
-  - Say: "体验完成后告诉我，我会收集反馈并更新文案 / Please tell me when you're done experiencing, and I'll collect feedback and update the copywriting"
-- **CRITICAL: STOP and WAIT for user confirmation** - Accept: "完成/done/y/yes" or similar confirmation
-- **DO NOT proceed** to Phase 6 until user confirms experience is complete
+  - Say: "体验完成后告诉我，我会收集反馈并更新文案"
+- **【Wait Point】** 等待用户确认体验完成
 
 ### Phase 6: Feedback & Final Update
 
@@ -227,33 +195,16 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
 - `technical-review.md` exists (generated in Phase 5)
 - `final.md` does NOT exist yet (will be created in this phase)
 
-**CRITICAL: STOP and ASK user**: "是否要更新文案？/ Do you want to update the copywriting? [y/n]"
-- **WAIT for user input**: Accept y/yes/是 or n/no/否 (case-insensitive)
-- **DO NOT proceed** until user provides explicit answer
-- **DO NOT assume** or proceed automatically
+**【Wait Point】** 是否要更新文案？ [y/n]
 
 **If user answers "n" or "否" or "no"**:
-- **Generate final.md** (enhance draft.md with technical-review.md insights, same logic as Phase 5 "否" branch):
-  - Read `draft.md` and `technical-review.md`
-  - Add technical highlights from code analysis
-  - Refine function descriptions based on deeper understanding
-  - Update target audience if needed
-  - Enhance installation command section
-  - **Output XHS-ready format**: `【】` sections, no `##`/`**`, links as `[text](url)`
-  - Maintain accessible style, supplement not merge
-- **Add frontmatter**: "信息来源: draft.md + technical-review.md技术分析, 更新说明: 基于技术分析文档更新，已体验但未收集反馈"
+- **Generate final.md**（按 generate_final.md 规则），frontmatter 更新说明：基于技术分析文档更新，已体验但未收集反馈
 - **Update RECORD.md** → **End**
 
 **If user answers "y" or "是" or "yes"**:
-- **Generate final.md first** (if not exists, use same enhancement logic as "否" branch above):
-  - Read `draft.md` and `technical-review.md`
-  - Enhance draft.md with technical-review.md insights
-  - **Output XHS-ready format**: `【】` sections, no `##`/`**`, links as `[text](url)`
-  - Add frontmatter: "信息来源: draft.md + technical-review.md技术分析, 更新说明: 基于技术分析文档更新，准备收集体验反馈"
+- **Generate final.md first**（按 generate_final.md 规则），frontmatter 更新说明：基于技术分析文档更新，准备收集体验反馈
 - **Collect feedback**:
-  - **CRITICAL: STOP and ASK user**: "选择反馈方式 / Please select feedback method: [1/2] (1=自由输入/free input, 2=回答预设问题/preset questions)"
-  - **WAIT for user input**: Accept 1 or 2 (as number or text)
-  - **DO NOT proceed** until user selects an option
+  - **【Wait Point】** 选择反馈方式 [1/2] (1=自由输入, 2=回答预设问题)
   - Option 1: User provides feedback freely
   - Option 2: Ask one by one:
     - "这个skill最让你惊喜的是什么？"
@@ -268,8 +219,11 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
 
 ## Document Structure
 
-**skill-source.md** (Phase 2 生成):
-- 来自 skills.sh 抓取，提取 name、description、features、usage、install、credits 等，去掉无关内容。供 xhs-render 作设计参考。
+**generate_final.md 规则**（draft + technical-review → final）：
+- 读取 `draft.md` 与 `technical-review.md`
+- 融入技术分析亮点，精炼功能描述，必要时更新目标受众、安装命令
+- 输出 XHS-ready：`【】` 小节，无 `##`/`**`，链接 `[文字](url)`，安装命令独立成行
+- 保持口语化，补充不合并；frontmatter 更新说明由调用方指定
 
 **final.md**:
 - XHS-ready，可直接复制到小红书。用 `【小节名】` 作分隔，不用 `##`/`**`，链接 `[文字](url)`，安装命令独立成行无代码块。
@@ -299,13 +253,12 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
 
 ## Key Principles
 
-- **CRITICAL: Always wait for user input**: When asking questions or presenting options, **STOP and WAIT** for explicit user response. **NEVER proceed automatically** or assume user's choice.
+- **【Wait Point】**：遇到标注处必须停止、等待用户输入；不得自动继续或假设用户选择。
 - **Smooth workflow**: No retries, use available info gracefully
 - **Accessibility first**: Not always hardcore technical, focus on user-friendly content
 - **User control**: User decides installation and experience - **always wait for explicit confirmation**
 - **Clear sources**: Always note information source in frontmatter
 - **Flexible feedback**: Support both free input and guided questions
-- **Explicit waits**: Use phrases like "STOP and WAIT", "DO NOT proceed", "CRITICAL" to emphasize waiting points
 
 ## Error Handling
 
@@ -313,6 +266,8 @@ Generate daily Xiaohongshu (小红书) content about Agent Skills. Intelligently
 - **File read fails**: Use web info, note limitation in technical-review.md
 
 ## Usage
+
+可与 xhs-render 联动：生成 final.md 后，用 xhs-render 将其转为配图。
 
 When user says `/skill` or requests daily skill content:
 1. Start Phase 1: Skill Selection
