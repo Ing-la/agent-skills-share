@@ -2,6 +2,9 @@
 .cursor/
 .agents/
 
+# 设计文档（仅本地）
+docs/
+
 # Obsidian 配置（个人工具）
 .obsidian/
 
