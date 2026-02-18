@@ -13,15 +13,13 @@ metadata:
 ## 流程
 
 1. **选模板（先与用户交互）**：列出可选模板，询问用户选择，待用户确认后再继续。
-   - 可选：ing-minimal、notion、memo
-   - 示例：「可选模板：ing-minimal（品牌简约，推荐）、notion（知识卡片风）、memo（备忘录标签风）。请问用哪个？」→ 用户回复后记下，后续用 `-t <所选>`
+   - 可选：ing-minimal、ing-notion、ing-skillshare（Ing 品牌）；minimal、notion、skillshare（share 品牌）
+   - 示例：「可选模板：ing-minimal（Ing 品牌简约，推荐）、ing-notion（Ing 井字格知识风）、ing-skillshare（Ing 技能分享风）；minimal、notion、skillshare 为 share 品牌同款。请问用哪个？」→ 用户回复后记下，后续用 `-t <所选>`
 
 2. **定位文档**：
    - 用户指定文案目录（如 `Agent-skills-share/daily-posts/YYYY-MM-DD-<skill-name>`）或具体文件
-   - **优先顺序**：`skill-source.md` > 用户指定的文档
-   - 若目录下有 `skill-source.md`（来自 skill-share Phase 2），优先读它
-   - 若用户说「渲染 draft」则读 `draft.md`；说「渲染 final」或未指定则默认 `final.md`
-   - 若用户指定其他文档（如 `my-copy.md`），读该文档
+   - **优先顺序**：用户明确指定文档时，以用户指定为准；否则若目录有 `skill-source.md` 则读它；否则默认 `final.md`
+   - 用户说「渲染 draft」→ 读 `draft.md`；说「渲染 final」或未指定 → 读 `final.md`；指定其他（如 `my-copy.md`）→ 读该文档
 
 3. **创建工作目录**：
    - `python .cursor/skills/xhs-render/scripts/get_output_dir.py <文案目录> --source <source>`
@@ -67,9 +65,12 @@ metadata:
 
 | 名称 | 说明 |
 |------|------|
-| ing-minimal | 品牌感简约，页眉「线—Ing—线」，安利 skill 专用，支持 $$...$$ LaTeX 数学公式（推荐） |
-| notion | 井字格背景，知识卡片风，内容直接显示在网格上 |
-| memo | 备忘录风格，浅蓝数字标签 + 粗体标题，内容按段落填充、带圆点排版 |
+| ing-minimal | Ing 品牌简约，页眉「线—Ing—线」，支持 LaTeX 数学公式（推荐） |
+| ing-notion | Ing 井字格背景，知识卡片风，内容直接显示在网格上 |
+| ing-skillshare | Ing 技能分享风，点阵背景、&lt; skills share 标签、Ing 水印、带圆点排版 |
+| minimal | share 品牌，与 ing-minimal 同款，水印为 share |
+| notion | share 品牌，与 ing-notion 同款，水印为 share |
+| skillshare | share 品牌，与 ing-skillshare 同款，水印为 share |
 
 纯标签页自动跳过，无页码。
 

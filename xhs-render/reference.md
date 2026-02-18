@@ -29,11 +29,11 @@ LLM 全权决定分几张、标题、布局等，生成时需遵守：
 | `{{title}}` | 主标题 |
 | `{{role}}` | cover / content / ending |
 | `{{EMOJI_BLOCK}}` | emoji 区块，有值则渲染 div，空则无 |
-| `{{TITLE_BLOCK}}` | 标题+装饰（ing-minimal 用） |
+| `{{TITLE_BLOCK}}` | 标题+装饰（部分模板含圆点等） |
 
 ## 画布尺寸
 
-3:4 比例，1242×1660 像素。
+3:4 比例，输出 1242×1660 像素。渲染时画布高度 1800px，裁切取顶部 1242×1660 避免底部留白。
 
 ## 渲染实现
 
@@ -45,7 +45,7 @@ LLM 全权决定分几张、标题、布局等，生成时需遵守：
 
 ## 可用模板（均为 .html 单文件）
 
-- ing-minimal（推荐）、notion、memo
+- ing-minimal、ing-notion、ing-skillshare（Ing 品牌）；minimal、notion、skillshare（share 品牌）。推荐：ing-minimal
 
 ## 脚本
 

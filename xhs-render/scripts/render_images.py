@@ -11,8 +11,10 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 SKILL_ROOT = SCRIPT_DIR.parent
 TEMPLATES_DIR = SKILL_ROOT / "templates"
 
-# XHS 3:4 推荐尺寸
+# XHS 3:4 推荐尺寸（输出）
 WIDTH, HEIGHT = 1242, 1660
+# 渲染画布比输出高 140px，避免底部纯色条（裁切时取顶部 HEIGHT）
+RENDER_HEIGHT = 1800
 
 # Windows 浏览器路径（优先 Chrome）
 BROWSER_PATHS = [
@@ -106,9 +108,9 @@ def _inject_viewport_styles(html: str, page_bg_hex: str = "FFFFFF") -> str:
     bg = f"#{page_bg_hex}"
     styles = (
         f"html,body{{margin:0!important;padding:0!important;overflow:hidden!important;}}"
-        f"html{{width:{WIDTH}px!important;height:{HEIGHT}px!important;background:{bg}!important;}}"
-        f"body{{min-width:{WIDTH}px!important;min-height:{HEIGHT}px!important;"
-        f"max-width:{WIDTH}px!important;max-height:{HEIGHT}px!important;}}"
+        f"html{{width:{WIDTH}px!important;height:{RENDER_HEIGHT}px!important;background:{bg}!important;}}"
+        f"body{{min-width:{WIDTH}px!important;min-height:{RENDER_HEIGHT}px!important;"
+        f"max-width:{WIDTH}px!important;max-height:{RENDER_HEIGHT}px!important;}}"
     )
     if "<style>" in html:
         return html.replace("<style>", f"<style>{styles}", 1)
@@ -116,7 +118,7 @@ def _inject_viewport_styles(html: str, page_bg_hex: str = "FFFFFF") -> str:
 
 
 def _crop_to_canvas(filepath: Path) -> None:
-    """若截图大于目标尺寸，裁切为 WIDTH×HEIGHT。"""
+    """裁切为输出尺寸 WIDTH×HEIGHT，取顶部区域（避免底部纯色条）。"""
     try:
         from PIL import Image
         img = Image.open(filepath).convert("RGB")
@@ -139,7 +141,7 @@ def _find_browser() -> str | None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Render XHS blocks to PNG images")
     parser.add_argument("blocks_file", help="JSON file with blocks")
-    parser.add_argument("-t", "--template", default="ing-minimal", help="Template name (ing-minimal, notion)")
+    parser.add_argument("-t", "--template", default="ing-minimal", help="Template: ing-minimal, ing-notion, ing-skillshare, minimal, notion, skillshare")
     parser.add_argument("-o", "--output", default="xhs-render", help="Output directory")
     args = parser.parse_args()
 
@@ -157,7 +159,7 @@ def main() -> None:
     # 从模板提取背景色，避免深色模板出现白条、浅色模板出现黑条
     page_bg = _extract_page_bg(template)
     hti = Html2Image(
-        size=(WIDTH, HEIGHT),
+        size=(WIDTH, RENDER_HEIGHT),
         output_path=str(out_dir),
         custom_flags=[
             f"--default-background-color={page_bg}",
@@ -184,7 +186,7 @@ def main() -> None:
         try:
             html_path = temp_html_dir / fname.replace(".png", ".html")
             html_path.write_text(html, encoding="utf-8")
-            hti.screenshot(html_file=str(html_path), save_as=fname, size=(WIDTH, HEIGHT))
+            hti.screenshot(html_file=str(html_path), save_as=fname, size=(WIDTH, RENDER_HEIGHT))
             html_path.unlink(missing_ok=True)
             _crop_to_canvas(out_path)
             output_paths.append(str(out_path))

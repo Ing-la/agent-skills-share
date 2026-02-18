@@ -89,7 +89,7 @@
     .content .katex { font-size: 30px; }
     .content .katex-display { margin: 24px 0; overflow-x: auto; }
     .xhs-bottom-buffer { flex: 0 0 140px; min-height: 140px; }
-    .share-watermark {
+    .ing-watermark {
       position: absolute;
       bottom: 200px;
       right: 48px;
@@ -100,7 +100,7 @@
       align-items: flex-end;
       justify-content: flex-end;
     }
-    .share-watermark svg { width: 100%; height: 100%; }
+    .ing-watermark svg { width: 100%; height: 100%; }
   </style>
 </head>
 <body class="role-{{role}}">
@@ -110,10 +110,10 @@
     <div class="content" id="math-content">{{content}}</div>
   </div>
   <div class="xhs-bottom-buffer"></div>
-  <div class="share-watermark" aria-hidden="true">
+  <div class="ing-watermark" aria-hidden="true">
     <svg viewBox="0 0 360 340" fill="none" xmlns="http://www.w3.org/2000/svg">
       <text x="350" y="235" text-anchor="end" font-family="'Press Start 2P', monospace" font-size="128"
-            fill="rgba(139, 115, 85, 0.18)" stroke="none">share</text>
+            fill="rgba(139, 115, 85, 0.18)" stroke="none">Ing</text>
     </svg>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" crossorigin="anonymous"></script>
