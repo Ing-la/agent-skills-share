@@ -33,6 +33,7 @@
       pointer-events: none;
       z-index: -1;
     }
+    /* 封面与内容页保持相同背景 */
     .skillshare-body {
       flex: 1;
       min-height: 0;
@@ -70,6 +71,7 @@
       letter-spacing: 0.02em;
     }
     body.role-cover .tag-title { font-size: 48px; }
+    body.role-cover .emoji { font-size: 100px; margin-bottom: 32px; }
     body.role-ending .tag-title { font-size: 36px; }
     .tag-title:empty { display: none; }
     .skillshare-tag:has(.tag-title:empty) { display: none; }
@@ -81,7 +83,17 @@
       white-space: pre-wrap;
       word-break: break-word;
     }
-    body.role-cover .content { font-size: 36px; color: #2a2a2a; }
+    body.role-cover .content { font-size: 78px; font-weight: 800; color: #1a1a1a; line-height: 1.4; letter-spacing: 0.04em; }
+    .cover-skill-badge {
+      display: inline-block;
+      font-family: "PingFang SC", "Source Han Sans SC", "Microsoft YaHei", sans-serif;
+      font-size: 50px;
+      font-weight: 600;
+      color: #1a1a1a;
+      letter-spacing: 0.08em;
+      margin-top: 28px;
+    }
+    .cover-skill-badge:empty { display: none; }
     .skillshare-line {
       margin-bottom: 20px;
       padding-left: 28px;
@@ -131,6 +143,7 @@
       <span class="tag-title">{{title}}</span>
     </div>
     <div class="content" id="skillshare-content">{{content}}</div>
+    {{SKILL_BADGE}}
   </div>
   <div class="xhs-bottom-buffer"></div>
   <div class="share-watermark" aria-hidden="true">

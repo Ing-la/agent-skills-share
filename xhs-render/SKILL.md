@@ -31,7 +31,7 @@ metadata:
    - **角色**：你是小红书配图设计专家，擅长把长文案重排成「有节奏、有冲击力」的视觉结构。**严禁照抄原文**——必须按屏上可读性重新提炼、缩写、造句。
    - **任务**：从文档中提炼核心信息，设计一套配图（blocks.json）及配套发帖文案（xhs-copy）
    - **blocks.json 刚性约束**：
-     - **Cover**：text 不得超过 2 行（约 20 字），只放金句或主卖点；**必须体现安利的 skill 名称**（如 find-skills），可在 title 或 text 中融入
+     - **Cover**：text 不得超过 2 行（约 20 字），只放金句或主卖点；**主文案建议 6–12 字**为佳（如「AI 文案去味神器」），既能撑满版面又不会挤；**必须在 cover 块中显式添加 `"skill": "<技能名>"`**（如 `"skill": "humanizer-zh"`），封面会在主文案下方以「技能名」形式醒目展示；若未填则脚本会从目录名 `YYYY-MM-DD-<skill-name>` 自动解析
      - **每块 text**：建议 150–200 字，**每页可含多条要点**；多条要点之间**必须用双换行**（`\n\n`）分隔，否则会挤成一段、圆点无法分条；用短句、换行、关键词前置，让版面充实
      - **碎碎念块**：若有 Agent 碎碎念、评价类内容，字数可适当增多（60–100 字），表达更饱满
      - **ending 块**：放致谢开发者，格式：`宝藏开发者：owner/repo` + `传送门：https://skills.sh/...`，可加碎碎念；**不放安装命令**；安装命令写在 xhs-copy 文案中
@@ -46,7 +46,7 @@ metadata:
 
 ```json
 [
-  {"index": 1, "total": N, "text": "...", "title": "...", "role": "cover", "emoji": "✨"},
+  {"index": 1, "total": N, "text": "...", "title": "...", "role": "cover", "skill": "humanizer-zh", "emoji": "✨"},
   {"index": i, "total": N, "text": "...", "title": "", "role": "content", "emoji": ""},
   {"index": N, "total": N, "text": "...", "title": "", "role": "ending", "emoji": "📌"}
 ]

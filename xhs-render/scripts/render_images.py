@@ -58,6 +58,18 @@ def is_tags_only_block(block: dict) -> bool:
             block.get("text", "").count("#") >= 2)
 
 
+def _extract_skill_from_path(out_dir: Path) -> str:
+    """从输出目录解析 skill 名。路径形如 .../YYYY-MM-DD-skill-name/xhs-render/from-xxx-vN/。"""
+    try:
+        parent_name = out_dir.parent.parent.name
+        parts = parent_name.split("-")
+        if len(parts) >= 4 and parts[0].isdigit() and parts[1].isdigit() and parts[2].isdigit():
+            return "-".join(parts[3:])
+    except (IndexError, AttributeError):
+        pass
+    return ""
+
+
 def _extract_page_bg(template: str) -> str:
     """从模板提取页面背景色（用于 html2image 与 html 兜底）。
     优先解析 /* xhs-page-bg: #RRGGBB */，否则取 body background 第一个 hex。
@@ -78,8 +90,8 @@ def _extract_page_bg(template: str) -> str:
     return "FFFFFF"
 
 
-def build_block_html(block: dict, template: str, page_bg_hex: str) -> str:
-    """将 block 填充进模板，返回完整 HTML。"""
+def build_block_html(block: dict, template: str, page_bg_hex: str, skill_for_cover: str = "") -> str:
+    """将 block 填充进模板，返回完整 HTML。skill_for_cover 仅对 cover 生效。"""
     emoji_val = block.get("emoji", "").strip()
     title_val = block.get("title", "").strip()
     emoji_block = f'<div class="emoji">{emoji_val}</div>' if emoji_val else ""
@@ -88,10 +100,18 @@ def build_block_html(block: dict, template: str, page_bg_hex: str) -> str:
         f'<div class="title-dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>'
         if title_val else ""
     )
+    skill_val = (block.get("skill") or skill_for_cover or "").strip()
+    is_cover = block.get("role") == "cover"
+    skill_badge = (
+        f'<div class="cover-skill-badge">「{skill_val}」</div>'
+        if is_cover and skill_val else ""
+    )
     html = template
     for k, v in (
         ("EMOJI_BLOCK", emoji_block),
         ("TITLE_BLOCK", title_block),
+        ("SKILL_BADGE", skill_badge),
+        ("skill", skill_val),
         ("content", block.get("text", "")),
         ("title", title_val),
         ("index", block.get("index", 0)),
@@ -173,13 +193,14 @@ def main() -> None:
     temp_html_dir = out_dir / ".temp_html"
     temp_html_dir.mkdir(exist_ok=True)
 
+    skill_from_path = _extract_skill_from_path(out_dir)
     output_paths = []
     for block in blocks:
         if is_tags_only_block(block):
             print(f"Skipped tags-only block {block.get('index')}", file=sys.stderr)
             continue
 
-        html = build_block_html(block, template, page_bg)
+        html = build_block_html(block, template, page_bg, skill_for_cover=skill_from_path)
         fname = f"{block.get('index', 0):02d}-{block.get('role', 'content')}.png"
         out_path = out_dir / fname
 

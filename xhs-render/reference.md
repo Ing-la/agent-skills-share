@@ -19,6 +19,7 @@
 | `{{role}}` | cover / content / ending |
 | `{{EMOJI_BLOCK}}` | emoji 区块，有值则渲染 div，空则无 |
 | `{{TITLE_BLOCK}}` | 标题+装饰（部分模板含圆点等） |
+| `{{SKILL_BADGE}}` | 仅 cover：在主文案下方以「技能名」形式展示，黑色 PingFang 字体 |
 
 ## 渲染实现
 
