@@ -13,7 +13,7 @@ metadata:
 ## 流程
 
 1. **选模板（先与用户交互）**：列出可选模板，询问用户选择，待用户确认后再继续。
-   - 可选：ing-minimal、ing-notion、ing-skillshare（Ing 品牌）；minimal、notion、skillshare（share 品牌）
+   - 可选：ing-minimal、ing-minimal-html、ing-notion、ing-skillshare（Ing 品牌）；minimal、notion、skillshare（share 品牌）
    - 示例：「可选模板：ing-minimal（Ing 品牌简约，推荐）、ing-notion（Ing 井字格知识风）、ing-skillshare（Ing 技能分享风）；minimal、notion、skillshare 为 share 品牌同款。请问用哪个？」→ 用户回复后记下，后续用 `-t <所选>`
 
 2. **定位文档**：
@@ -73,7 +73,8 @@ metadata:
 
 | 名称 | 说明 |
 |------|------|
-| ing-minimal | Ing 品牌简约，页眉「线—Ing—线」，支持 LaTeX 数学公式（推荐） |
+| ing-minimal | Ing 品牌简约，页眉「线—Ing—线」，封面 57px 加粗，ending 左对齐，支持 LaTeX（推荐） |
+| ing-minimal-html | 与 ing-minimal 同款，额外支持 HTML 富文本（strong、code、table） |
 | ing-notion | Ing 井字格背景，知识卡片风，内容直接显示在网格上 |
 | ing-skillshare | Ing 技能分享风，点阵背景、&lt; skills share 标签、Ing 水印、带圆点排版 |
 | minimal | share 品牌，与 ing-minimal 同款，水印为 share |
