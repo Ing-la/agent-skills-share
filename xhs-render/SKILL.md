@@ -8,7 +8,7 @@ metadata:
 
 # xhs-render — 小红书文案转图 + 配套文案
 
-用户提供需渲染的文案所在目录（或指定文档），Skill 完成：选模板 → 定位文档 → 创建工作目录 → LLM 设计 blocks.json 与 xhs-copy → 渲染成图并写入配套文案。
+用户提供需渲染的文案所在目录（或指定文档），Skill 完成：选模板 → 定位文档 → 创建工作目录 →（可选）布局计划确认 → LLM 设计 blocks.json 与 xhs-copy → 渲染成图并写入配套文案。
 
 ## 流程
 
@@ -26,7 +26,21 @@ metadata:
    - source：用户指定 draft 时用 `draft`，指定其他自定义文档时用 `custom`，否则 `final`
    - 输出目录：`<文案目录>/xhs-render/from-{source}-v{N}/`（如 `from-final-v1`、`from-draft-v1`）
 
-4. **LLM 设计 blocks.json 与 xhs-copy**（一次产出）：
+4. **【可选】布局计划确认**（在渲染前与用户多轮交互，提高结果贴合度）：
+   - **触发条件**：用户明确要求「先确认布局」「多交互几次」「详细分块」等；或文档较长、步骤多、表格多时，Agent 主动建议走此流程。
+   - **执行方式**：LLM 先阅读文档，输出一份**分图布局计划**（不生成 blocks.json），格式示例：
+     ```
+     ## 布局分块方案（共 N 张图）
+     ### Block 1 · Cover：主文案 / 副文案
+     ### Block 2 · 标题：内容摘要（1–2 句）
+     ### Block 3 · ...
+     ### Block N · Ending：致谢/链接等
+     ## 需确认点：模板、分块是否合适、细节程度、Ending 内容等
+     ```
+   - **用户确认**：用户回复「确认」「可以」「开始渲染」→ 进入步骤 5；用户提出修改（如「Block 8 拆分」「Privacy 改 Public」）→ Agent 根据反馈调整布局计划，再次呈现，直至用户确认。
+   - **跳过**：用户说「直接渲染」或未要求确认时，可跳过此步，直接进入步骤 5。
+
+5. **LLM 设计 blocks.json 与 xhs-copy**（一次产出；若已走步骤 4，则严格按用户确认的布局计划执行）：
    - 读取定位到的文档
    - **角色**：你是小红书配图设计专家，擅长把长文案重排成「有节奏、有冲击力」的视觉结构。**严禁照抄原文**——必须按屏上可读性重新提炼、缩写、造句。
    - **任务**：从文档中提炼核心信息，设计一套配图（blocks.json）及配套发帖文案（xhs-copy）
@@ -40,7 +54,7 @@ metadata:
    - **xhs-copy**：与配图配套的发帖文案，XHS-ready 纯文本——无 `##`、`**`、`` ` ``，可直接复制到小红书。链接用 `[文字](url)`。**必须包含安装命令**（npx skills add ...）。**不含 hashtag**（用户发布时自选）
    - **输出**：写入 `<输出目录>/blocks.json` 与 `<输出目录>/xhs-copy.md`
 
-5. **渲染**：`python .cursor/skills/xhs-render/scripts/render_images.py <输出目录>/blocks.json -t <用户所选模板> -o <输出目录>`
+6. **渲染**：`python .cursor/skills/xhs-render/scripts/render_images.py <输出目录>/blocks.json -t <用户所选模板> -o <输出目录>`
 
 ## blocks.json Schema
 
